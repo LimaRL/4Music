@@ -6,21 +6,45 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Database {
 	public Map<String,String> musicTable = new HashMap<String,String>();
+	public ArrayList<String> userDB = new ArrayList<String>(); 
 	String pathDB;
 
-	public Database() {
+	public Database(String database) {
 		try {
-			this.pathDB = new java.io.File(".").getCanonicalPath() + "/database/database.txt";
-			this.LoadDB();
+			this.pathDB = new java.io.File(".").getCanonicalPath() + "/database/" + database + ".txt";
+			if(database.equals("database")) {
+				this.LoadDB();
+			}else if(database.equals("database_users")) {
+				this.LoadListDB();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+
+
+
+	public void LoadListDB() {
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new FileReader(this.pathDB));
+			String lineValue = reader.readLine();
+			while (lineValue != null) {
+				this.userDB.add(lineValue);
+				lineValue = reader.readLine();
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 
 	public void LoadDB() {
 		BufferedReader reader;
@@ -54,9 +78,9 @@ public class Database {
 			e.printStackTrace();
 		} 
 	}
-	
-	
-	
+
+
+
 	public void insert(String key, String value) {
 		this.musicTable.put(key, value);
 	}

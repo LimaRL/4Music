@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import cr.player.MainApp;
-import cr.player.model.Database;
 import cr.player.model.Music;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -181,8 +180,7 @@ public class PlayerController {
 	    String music = musicTable.getSelectionModel().getSelectedItem().getMusic();
 	    if (selectedIndex >= 0) {
 	    	musicTable.getItems().remove(selectedIndex);
-	    	Database db = this.mainApp.getDB();
-	    	db.delete(music);
+	    	MainApp.db.delete(music);
 	    	this.Stop();
 	    } else {
 	        // Nothing selected.
@@ -214,8 +212,7 @@ public class PlayerController {
 				
 				musicTable.getItems().add(new Music(name, path));
 				
-				Database db = this.mainApp.getDB();
-				db.insert(name, path);
+				MainApp.db.insert(name, path);
 			}else {
 				// Nothing selected.
 		        Alert alert = new Alert(AlertType.WARNING);
@@ -230,6 +227,8 @@ public class PlayerController {
 			System.out.println("fffff");
 		}
 	}
+	
+	
 	
 	/**
 	 * initialize
@@ -246,10 +245,8 @@ public class PlayerController {
 		// Inicializa a coluna das musicas
 		musicName.setCellValueFactory(
 				cellData -> cellData.getValue().musicProperty());
-
 		this.mainApp = app;
-
 		// Adiciona dados da observable list na tabela 
-		musicTable.setItems(mainApp.getMusicData());
+		musicTable.setItems(MainApp.musicTable);
 	}
 }
